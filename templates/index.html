@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="/static/js/jquery.min.js"></script>
+</head>
+<body>
+<div style="width: 20rem; margin: 10rem auto auto;display: flex;height: 20rem; flex-direction: column;justify-content: space-around">
+    <input id="username" type="text" placeholder="username"/>
+    <input id="password" type="password" placeholder="password"/>
+    <input id="reset" type="password" placeholder="new password"/>
+    <button onclick="login()">login</button>
+    <button onclick="register()">register</button>
+    <button onclick="now()">now</button>
+    <button onclick="reset()">reset</button>
+    <button onclick="logout()">logout</button>
+</div>
+<script>
+    const login = () => {
+        $.post('/user/login', {username: $('#username').val(), password: $('#password').val()}, (res) => {
+            if (res.status === 200) {
+                alert('login success')
+            } else {
+                alert('login fail')
+            }
+        })
+    }
+    const register = () => {
+        $.post('/user/create', {username: $('#username').val(), password: $('#password').val()}, (res) => {
+            if (res.status === 200) {
+                alert('register success')
+            } else {
+                alert('register fail')
+            }
+        })
+    }
+    const now = () => {
+        $.get('/user', null, (res) => {
+            if (res.status === 200) {
+                alert('now is ' + res.data)
+            } else {
+                alert('not login')
+            }
+        })
+    }
+    const reset = () => {
+        if ($('#password').val() && $('#reset').val) {
+            $.post('/user/update', {
+                username: $('#username').val(),
+                password: $('#password').val(),
+                reset: $('#reset').val()
+            }, (res) => {
+                if (res.status === 200) {
+                    alert('reset success')
+                } else {
+                    alert('reset fail')
+                }
+            })
+        } else {
+            alert('confirm is not same')
+        }
+
+    }
+    const logout = () => {
+        $.get('/user/logout', null, (res) => {
+            if (res.status === 200) {
+                alert('logout success')
+            } else {
+                alert('logout fail')
+            }
+        })
+
+
+    }
+</script>
+
+</body>
+</html>
